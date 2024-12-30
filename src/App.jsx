@@ -3,6 +3,7 @@ import "./reset.css"
 import React from 'react';
 import data from './assets/data.js'
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 console.log(data);
 
 
@@ -35,8 +36,18 @@ function handleSelectChange(e) {
   setSelectedRegion(e.target.value);
 }
 
+const cardVariants = {
+  hidden: { opacity: 0, y: 60 },
+  visible: i => ({
+    opacity: 1,
+    y: 70,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.5,
+    },
+  }),
+};
 
-// filteredData.filter(x => x.name.common.toLowerCase().includes(search.toLowerCase()));
   return (
     <div className='container'>
       <Header />
@@ -52,7 +63,7 @@ function handleSelectChange(e) {
       </select>
       </div>
       <div className='card-area'>
-        {filteredData.map(x => <Card name={x.name.common} population={x.population} region={x.region} capital={x.capital} flag={x.flags.svg} />)}
+       {filteredData.map((x,index) => (<motion.div key={x.name.common} custom={index} variants={cardVariants} initial='hidden' animate='visible'> <Card name={x.name.common} population={x.population} region={x.region} capital={x.capital} flag={x.flags.svg} /> </motion.div>))}
       </div>
     </div>
   )
@@ -71,7 +82,6 @@ function Card({name, population, region, capital, flag}) {
   </div>
   )
 }
-
 
 function switchTheme() {
   const isDark = document.querySelector("body").classList.toggle("dark-mode");
